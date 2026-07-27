@@ -5,7 +5,7 @@ import { Points, PointMaterial } from "@react-three/drei";
 import { useState, useRef, useMemo } from "react";
 
 function StarBackground() {
-  const ref = useRef<any>();
+  const ref = useRef<any>(null);
   
   // Generate random points on a sphere
   const sphere = useMemo(() => {
