@@ -7,7 +7,7 @@ const experiences = [
   {
     company: "InnerCircle Softech Pvt. Ltd.",
     role: "Full Stack Software Engineer Intern",
-    date: "2023 - Present",
+    date: "2026 - Present",
     type: "Internship",
     description: "Developing full stack web applications with frontend, backend, database, and authentication. Building and integrating CRUD applications with REST APIs.",
     tech: ["React.js", "FastAPI", "REST APIs", "Cloud"]
@@ -15,7 +15,7 @@ const experiences = [
   {
     company: "InternPe",
     role: "AI/ML Intern",
-    date: "2023",
+    date: "2025",
     type: "Internship",
     description: "Worked on machine learning models and AI-based tasks, gaining hands-on experience in data processing and model development.",
     tech: ["Python", "Machine Learning", "Data Processing"]
@@ -23,7 +23,7 @@ const experiences = [
   {
     company: "Zetheta Algorithms Private Limited",
     role: "Software Engineer Intern",
-    date: "2022",
+    date: "2026",
     type: "Part-time",
     description: "Selected for the Circa Internship Programme to work on remote software engineering projects in a professional development environment.",
     tech: ["Software Engineering", "Agile"]
@@ -31,7 +31,7 @@ const experiences = [
   {
     company: "BrightCHAMPS",
     role: "Coding Educator",
-    date: "2021 - 2022",
+    date: "2026",
     type: "Freelance",
     description: "Conduct coding sessions for Grade 1-10 students, teaching programming fundamentals, logic building, and problem-solving.",
     tech: ["Teaching", "Logic Building", "Fundamentals"]

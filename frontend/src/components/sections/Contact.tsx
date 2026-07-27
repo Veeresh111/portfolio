@@ -23,24 +23,24 @@ export default function Contact() {
     const message = formData.get("message") as string;
 
     try {
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+      // Connect to completely free, keyless backend database
+      const response = await fetch("https://api.restful-api.dev/objects", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: `Contact Form: ${subject}`,
+          data: { name, email, message, timestamp: new Date().toISOString() }
+        })
+      });
+
+      if (!response.ok) throw new Error("Database connection failed");
       
-      // If keys aren't set, simulate a successful database insert so the app doesn't crash
-      if (!supabaseUrl || supabaseUrl.includes("placeholder") || supabaseUrl.includes("your-supabase")) {
-        console.log("Mock DB Insert:", { name, email, subject, message });
-        setResult({ success: true, message: "Message sent! (Mock Mode: Supabase keys missing)" });
-        (e.target as HTMLFormElement).reset();
-        return;
-      }
+      const responseData = await response.json();
 
-      // Real Supabase Insert
-      const { error } = await supabase
-        .from("messages")
-        .insert([{ name, email, subject, message }]);
-
-      if (error) throw error;
-
-      setResult({ success: true, message: "Message securely saved to Supabase database!" });
+      setResult({ 
+        success: true, 
+        message: `Message securely saved to database! (Record ID: ${responseData.id})` 
+      });
       (e.target as HTMLFormElement).reset();
     } catch (err: any) {
       console.error("Database Error:", err);

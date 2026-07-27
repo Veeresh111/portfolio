@@ -34,7 +34,7 @@ export default function About() {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-              I am Veeresh Mulge, currently pursuing a Bachelor of Engineering in Computer Science and Engineering at Guru Nanak Dev Engineering College. With a stellar CGPA of 8.24, I have a strong foundation in CS fundamentals and a passion for building intelligent systems.
+              I am Veeresh Mulge, I have already graduated in my bachelors degree of Computer Science and Engineering at Guru Nanak Dev Engineering College. With a stellar CGPA of 8.24, I have a strong foundation in CS fundamentals and a passion for building intelligent systems.
             </p>
             <p className="text-lg text-muted-foreground leading-relaxed mb-8">
               My journey spans across Full Stack Web Development and Artificial Intelligence. I believe in blending performance, elegant design, and cutting-edge machine learning models to solve real-world problems.
