@@ -1,84 +1,55 @@
-import Fuse from "fuse.js";
-
-// Prepare a flattened array for Fuse.js fallback
-const knowledgeBase = [
-  { category: "skills", text: "Next.js, React, Node.js, Python, FastAPI, TypeScript, PostgreSQL (Supabase), MongoDB, Hugging Face, Gemini, LangChain" },
-  { category: "experience", text: "Full Stack Web Developer at InnerCircle (LMS platform, Next.js, Firebase). Frontend Web Developer at InternPe. Contributed to GSSoC'24. Built Java apps at Prodigy InfoTech." },
-  { category: "projects", text: "FinGurus (full-stack SaaS), Gen-Ai-Chatbot (Gemini API, React), Code-Editor (online code editor), Docu-med (healthcare web app)." },
-  { category: "education", text: "Already graduated with a Bachelor of Engineering in Computer Science and Engineering at Guru Nanak Dev Engineering College, Bidar, CGPA: 8.24." },
-  { category: "contact", text: "Email: prakashmulge912@gmail.com, Phone: +91 8310920373." },
-  { category: "location", text: "Based in Bidar, Karnataka, India. Open to remote opportunities globally." }
-];
-
-const fuse = new Fuse(knowledgeBase, {
-  keys: ["text"],
-  threshold: 0.5,
-  includeScore: true,
-});
-
-// Helper for dynamic varied responses
-const randomResponse = (responses: string[]) => responses[Math.floor(Math.random() * responses.length)];
+// Prepare the knowledge base for the LLM
+const resumeContext = `
+Veeresh Mulge's Professional Profile:
+Skills: Next.js, React, Node.js, Python, FastAPI, TypeScript, PostgreSQL (Supabase), MongoDB, Hugging Face, Gemini, LangChain
+Experience: 
+- Full Stack Web Developer at InnerCircle (LMS platform, Next.js, Firebase) - 2026 to Present
+- Frontend Web Developer at InternPe - 2025
+- Software Engineer Intern at Zetheta Algorithms - 2026
+- Coding Educator at BrightCHAMPS - 2026
+Projects: FinGurus (full-stack SaaS), Gen-Ai-Chatbot (Gemini API, React), Code-Editor (online code editor), Docu-med (healthcare web app).
+Education: Already graduated with a Bachelor of Engineering in Computer Science and Engineering at Guru Nanak Dev Engineering College, Bidar, CGPA: 8.24.
+Contact: Email: prakashmulge912@gmail.com, Phone: +91 8310920373.
+Location: Based in Bidar, Karnataka, India. Open to remote opportunities globally.
+`;
 
 export const generateEdgeAIResponse = async (input: string): Promise<string> => {
-  const query = input.toLowerCase().trim();
+  const query = input.trim();
 
-  // 1. Conversational / Small Talk Intent
-  if (/^(hi|hello|hey|greetings|sup|howdy)[\s\!\.\?]*$/.test(query)) {
-    return randomResponse([
-      "Hello! I'm Veeresh's AI Assistant. I know all about his skills, experience, and projects. Feel free to ask me anything about his professional background!",
-      "Hi there! I'm the AI representation of Veeresh. How can I help you learn more about his work today?",
-      "Greetings! I'm here to answer any questions you have about Veeresh's engineering background. What would you like to know?"
-    ]);
-  }
+  // Prompt engineering to guide the LLM
+  const prompt = `You are Veeresh's intelligent AI assistant, embedded on his personal portfolio website. 
+Your goal is to answer questions about Veeresh politely, concisely, and professionally. 
+If the user asks something conversational (like "how are you", "are you a fool", "what's your name"), respond naturally and steer the conversation back to Veeresh's skills.
+Keep answers under 3 sentences if possible.
 
-  if (query.includes("how are you") || query.includes("how do you do") || query.includes("mood")) {
-    return randomResponse([
-      "I'm functioning perfectly, thank you! My mood is always optimal when I get to talk about Veeresh's software engineering journey. What can I help you with?",
-      "I'm doing great! Always excited to talk about Veeresh's projects and skills. What would you like to explore?"
-    ]);
-  }
-  
-  if (query.includes("who are you") || query.includes("what are you") || query.includes("tell me about yourself")) {
-    return "I am a custom Edge-computed AI built by Veeresh to act as his digital recruiter assistant. I'm designed to answer your questions instantly, right here in your browser! I know all about his skills, projects, and experience.";
-  }
+Here is all the knowledge you have about Veeresh:
+${resumeContext}
 
-  if (query.includes("repo") || query.includes("github")) {
-    return "Veeresh is very active on GitHub! He has numerous repositories covering full-stack development, AI/ML, and open-source contributions. You can check out his complete portfolio of work at github.com/Veeresh111.";
-  }
+User asked: "${query}"
+Your response:`;
 
-  // 2. Exact Match / Regex Intents (Super Smart Routing)
-  if (query.includes("skill") || query.includes("tech") || query.includes("stack") || query.includes("language")) {
-    return `Veeresh has a highly versatile tech stack! His core expertise includes:\n\n**Languages:** C, Java, Python\n**Web:** HTML, CSS, JavaScript, React, Node.js, Next.js, Tailwind CSS\n**Databases:** MySQL, PostgreSQL\n\nHe is incredibly adaptable and always eager to learn new technologies. Is there a specific tool you're looking for?`;
-  }
+  try {
+    const response = await fetch('https://free-api.cveoy.top/v3/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt }),
+    });
 
-  if (query.includes("experience") || query.includes("work") || query.includes("job") || query.includes("intern")) {
-    return `Veeresh has excellent hands-on experience! Recently in 2026, he worked as a **Full Stack Software Engineer Intern at InnerCircle Softech**, where he built CRUD applications using React and FastAPI. He also worked at Zetheta Algorithms and BrightCHAMPS in 2026.\n\nPreviously in 2025, he gained ML experience as an **AI/ML Intern at InternPe**.\n\nWould you like to hear about his projects instead?`;
-  }
+    if (!response.ok) {
+      throw new Error("Free LLM API failed");
+    }
 
-  if (query.includes("project") || query.includes("portfolio") || query.includes("build") || query.includes("made")) {
-    return `Veeresh has built several impressive projects! Some highlights include:\n\n1. **AI-Driven Mock Interview App:** A real-time feedback tool built with React, FastAPI, and Gemini AI.\n2. **Enterprise Management System:** A secure role-based collaboration platform using React and Supabase.\n3. **AI Bon Voyage:** An AI travel assistant integrated with Google Maps.\n\nYou can see them all in the Projects section above!`;
+    let text = await response.text();
+    
+    // Strip out the Chinese advertisement injected by the free API
+    text = text.replace(/欢迎使用 公益站! 站长合作邮箱：wxgpt@qq\.com<br\/>\\n\\n/g, '');
+    text = text.replace(/欢迎使用 公益站! 站长合作邮箱：wxgpt@qq\.com<br\/>\n\n/g, '');
+    text = text.replace(/欢迎使用 公益站! 站长合作邮箱：wxgpt@qq\.com<br\/>/g, '');
+    
+    return text.trim() || "I'm having a little trouble thinking right now, but I can definitely tell you that Veeresh is a fantastic Full Stack Developer!";
+  } catch (error) {
+    console.error("AI Generation Error:", error);
+    // Graceful fallback if the free API is down
+    return "I am Veeresh's AI Assistant! I'm currently operating in offline mode, but I can tell you that Veeresh is an incredible Full Stack Engineer. You can email him directly at prakashmulge912@gmail.com!";
   }
-
-  if (query.includes("education") || query.includes("study") || query.includes("college") || query.includes("degree") || query.includes("graduate")) {
-    return `Veeresh has already graduated with his **Bachelor of Engineering in Computer Science** at Guru Nanak Dev Engineering College, Bidar! He maintained an excellent CGPA of 8.24 during his studies.`;
-  }
-
-  if (query.includes("contact") || query.includes("email") || query.includes("phone") || query.includes("reach") || query.includes("hire")) {
-    return `You can reach out to Veeresh directly via email at **prakashmulge912@gmail.com** or call him at **+91 8310920373**. You can also use the contact form at the bottom of this page!`;
-  }
-
-  // 3. Fallback to Fuse.js Fuzzy Search for specific keywords
-  const results = fuse.search(query);
-  
-  if (results.length > 0 && results[0].score && results[0].score < 0.6) {
-    const bestMatch = results[0].item;
-    return `Based on his resume, here is what I found regarding "${query}":\n\n${bestMatch.text}\n\nLet me know if you want to know more about his background!`;
-  }
-
-  // 4. Ultimate Fallback (Gemini-style graceful degradation)
-  return randomResponse([
-    "I'm an AI, and I'm still learning! While I don't have the exact answer to that, I can tell you all about Veeresh's skills, experience, and projects. What would you like to know?",
-    "That's a great question! I don't have that specific detail in my memory banks right now. However, I know Veeresh is a fast learner and a highly capable engineer. You can email him at prakashmulge912@gmail.com for more specifics!",
-    "I'm not completely sure about that specific detail, but I'd be happy to tell you about Veeresh's robust tech stack or his recent internship experiences. Which sounds better?"
-  ]);
 };
