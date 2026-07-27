@@ -15,7 +15,7 @@ export default function Contact() {
     e.preventDefault();
     setIsPending(true);
     setResult(null);
-    
+
     const formData = new FormData(e.currentTarget);
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
@@ -26,29 +26,29 @@ export default function Contact() {
       // Connect to FormSubmit to send messages directly to the user's email inbox
       const response = await fetch("https://formsubmit.co/ajax/prakashmulge912@gmail.com", {
         method: "POST",
-        headers: { 
+        headers: {
           "Content-Type": "application/json",
           "Accept": "application/json"
         },
         body: JSON.stringify({
           _subject: `New Portfolio Message: ${subject}`,
-          name, 
-          email, 
-          message, 
+          name,
+          email,
+          message,
         })
       });
 
       if (!response.ok) throw new Error("Email service failed");
-      
+
       const responseData = await response.json();
 
       if (responseData.success === "false") {
         throw new Error(responseData.message || "Email delivery failed");
       }
 
-      setResult({ 
-        success: true, 
-        message: "Message delivered successfully! Check your email inbox." 
+      setResult({
+        success: true,
+        message: "Message delivered successfully! "
       });
       (e.target as HTMLFormElement).reset();
     } catch (err: any) {
@@ -134,9 +134,9 @@ export default function Contact() {
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label htmlFor="name" className="text-sm font-medium text-muted-foreground">Name *</label>
-                    <input 
-                      type="text" 
-                      id="name" 
+                    <input
+                      type="text"
+                      id="name"
                       name="name"
                       required
                       className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
@@ -145,9 +145,9 @@ export default function Contact() {
                   </div>
                   <div className="space-y-2">
                     <label htmlFor="email" className="text-sm font-medium text-muted-foreground">Email *</label>
-                    <input 
-                      type="email" 
-                      id="email" 
+                    <input
+                      type="email"
+                      id="email"
                       name="email"
                       required
                       className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
@@ -157,9 +157,9 @@ export default function Contact() {
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="subject" className="text-sm font-medium text-muted-foreground">Subject</label>
-                  <input 
-                    type="text" 
-                    id="subject" 
+                  <input
+                    type="text"
+                    id="subject"
                     name="subject"
                     className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                     placeholder="Project Inquiry"
@@ -167,8 +167,8 @@ export default function Contact() {
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="message" className="text-sm font-medium text-muted-foreground">Message *</label>
-                  <textarea 
-                    id="message" 
+                  <textarea
+                    id="message"
                     name="message"
                     required
                     rows={5}
@@ -176,14 +176,14 @@ export default function Contact() {
                     placeholder="Hello, I'd like to talk about..."
                   />
                 </div>
-                
+
                 {result?.success && (
                   <div className="p-3 bg-green-500/10 border border-green-500/20 text-green-400 rounded-lg flex items-center gap-2">
                     <CheckCircle2 className="w-5 h-5" />
                     <span className="text-sm">{result.message}</span>
                   </div>
                 )}
-                
+
                 {result?.error && (
                   <div className="p-3 bg-red-500/10 border border-red-500/20 text-red-400 rounded-lg flex items-center gap-2">
                     <AlertCircle className="w-5 h-5" />
