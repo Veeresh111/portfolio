@@ -2,21 +2,22 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Bot, User } from "lucide-react";
+import { MessageSquare, X, Send, Bot, User } from "lucide-react";
 import { Button } from "./ui/button";
+import { generateEdgeAIResponse } from "@/lib/edgeAi";
 
 interface Message {
-  role: "user" | "bot";
+  role: "bot" | "user";
   content: string;
 }
 
 export default function AIChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: "bot", content: "Hi! I'm Veeresh's AI Assistant. Ask me anything about his experience, projects, or skills!" }
+    { role: "bot", content: "Hi! I'm Veeresh's AI Assistant. Ask me anything about his skills, experience, or projects!" }
   ]);
   const [input, setInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -25,29 +26,25 @@ export default function AIChatbot() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, isTyping]);
 
   const handleSend = async () => {
     if (!input.trim()) return;
-
-    const userMessage = input.trim();
+    
+    const userMsg = input;
+    setMessages(prev => [...prev, { role: "user", content: userMsg }]);
     setInput("");
-    setMessages(prev => [...prev, { role: "user", content: userMessage }]);
-    setIsLoading(true);
+    setIsTyping(true);
 
     try {
-      // Pointing to the FastAPI backend
-      const res = await fetch("http://localhost:8000/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMessage })
-      });
-      const data = await res.json();
-      setMessages(prev => [...prev, { role: "bot", content: data.response }]);
+      // Simulate network delay for a more natural feel
+      await new Promise(resolve => setTimeout(resolve, 600));
+      const responseText = await generateEdgeAIResponse(userMsg);
+      setMessages(prev => [...prev, { role: "bot", content: responseText }]);
     } catch (error) {
-      setMessages(prev => [...prev, { role: "bot", content: "Sorry, the backend is currently offline. Please try again later." }]);
+      setMessages(prev => [...prev, { role: "bot", content: "Sorry, I'm having trouble thinking right now!" }]);
     } finally {
-      setIsLoading(false);
+      setIsTyping(false);
     }
   };
 
@@ -64,7 +61,7 @@ export default function AIChatbot() {
             onClick={() => setIsOpen(true)}
             className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-tr from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-purple-500/20 z-50"
           >
-            <MessageCircle className="w-6 h-6" />
+            <MessageSquare className="w-6 h-6" />
           </motion.button>
         )}
       </AnimatePresence>
@@ -106,7 +103,7 @@ export default function AIChatbot() {
                   </div>
                 </div>
               ))}
-              {isLoading && (
+              {isTyping && (
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-tr from-blue-500 to-purple-600">
                     <Bot className="w-4 h-4 text-white" />
@@ -135,7 +132,7 @@ export default function AIChatbot() {
                   placeholder="Ask about my AI projects..."
                   className="flex-1 bg-black/50 border border-white/10 rounded-full px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                 />
-                <Button type="submit" size="icon" variant="premium" className="rounded-full flex-shrink-0" disabled={isLoading || !input.trim()}>
+                <Button type="submit" size="icon" variant="premium" className="rounded-full flex-shrink-0" disabled={isTyping || !input.trim()}>
                   <Send className="w-4 h-4" />
                 </Button>
               </form>

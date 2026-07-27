@@ -77,22 +77,26 @@ export default function Contact() {
             transition={{ duration: 0.5 }}
           >
             <div className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
-              <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+              <form action="https://formsubmit.co/prakashmulge912@gmail.com" method="POST" className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label htmlFor="name" className="text-sm font-medium text-muted-foreground">Name</label>
+                    <label htmlFor="name" className="text-sm font-medium text-muted-foreground">Name *</label>
                     <input 
                       type="text" 
                       id="name" 
+                      name="name"
+                      required
                       className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                       placeholder="John Doe"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium text-muted-foreground">Email</label>
+                    <label htmlFor="email" className="text-sm font-medium text-muted-foreground">Email *</label>
                     <input 
                       type="email" 
                       id="email" 
+                      name="email"
+                      required
                       className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                       placeholder="john@example.com"
                     />
@@ -103,20 +107,25 @@ export default function Contact() {
                   <input 
                     type="text" 
                     id="subject" 
+                    name="_subject"
                     className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                     placeholder="Project Inquiry"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="message" className="text-sm font-medium text-muted-foreground">Message</label>
+                  <label htmlFor="message" className="text-sm font-medium text-muted-foreground">Message *</label>
                   <textarea 
                     id="message" 
+                    name="message"
+                    required
                     rows={5}
                     className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"
                     placeholder="Hello, I'd like to talk about..."
                   />
                 </div>
-                <Button variant="premium" className="w-full h-12 text-lg gap-2">
+                <input type="hidden" name="_next" value="https://veeresh111.github.io/portfolio" />
+                <input type="hidden" name="_captcha" value="false" />
+                <Button variant="premium" type="submit" className="w-full h-12 text-lg gap-2">
                   <Send className="w-5 h-5" /> Send Message
                 </Button>
               </form>
@@ -127,3 +136,4 @@ export default function Contact() {
     </section>
   );
 }
+

@@ -2,7 +2,6 @@
 
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
-import * as random from "math-utils/random"; // We'll implement a simple random array generator
 import { useState, useRef, useMemo } from "react";
 
 function StarBackground() {

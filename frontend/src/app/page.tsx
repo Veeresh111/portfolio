@@ -63,11 +63,15 @@ export default function Home() {
             transition={{ delay: 0.6, duration: 0.8 }}
             className="flex flex-wrap items-center justify-center gap-4"
           >
-            <Button variant="premium" size="lg" className="rounded-full gap-2 group">
-              View Projects <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <Button variant="premium" size="lg" className="rounded-full gap-2 group" asChild>
+              <Link href="#projects">
+                View Projects <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </Button>
-            <Button variant="glass" size="lg" className="rounded-full gap-2">
-              <Download className="w-4 h-4" /> Download Resume
+            <Button variant="glass" size="lg" className="rounded-full gap-2" asChild>
+              <a href="resume.txt" download="Veeresh_Mulge_Resume.txt">
+                <Download className="w-4 h-4" /> Download Resume
+              </a>
             </Button>
           </motion.div>
 

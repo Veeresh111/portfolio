@@ -26,8 +26,8 @@ export default function Navbar() {
           <Link href="#skills" className="hover:text-foreground transition-colors">Skills</Link>
         </div>
         <div className="flex items-center gap-4">
-          <Button variant="premium" className="hidden md:flex rounded-full px-6">
-            Hire Me
+          <Button variant="premium" className="hidden md:flex rounded-full px-6" asChild>
+            <Link href="#contact">Hire Me</Link>
           </Button>
         </div>
       </div>
