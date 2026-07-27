@@ -23,28 +23,37 @@ export default function Contact() {
     const message = formData.get("message") as string;
 
     try {
-      // Connect to completely free, keyless backend database
-      const response = await fetch("https://api.restful-api.dev/objects", {
+      // Connect to FormSubmit to send messages directly to the user's email inbox
+      const response = await fetch("https://formsubmit.co/ajax/prakashmulge912@gmail.com", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
         body: JSON.stringify({
-          name: `Contact Form: ${subject}`,
-          data: { name, email, message, timestamp: new Date().toISOString() }
+          _subject: `New Portfolio Message: ${subject}`,
+          name, 
+          email, 
+          message, 
         })
       });
 
-      if (!response.ok) throw new Error("Database connection failed");
+      if (!response.ok) throw new Error("Email service failed");
       
       const responseData = await response.json();
 
+      if (responseData.success === "false") {
+        throw new Error(responseData.message || "Email delivery failed");
+      }
+
       setResult({ 
         success: true, 
-        message: `Message securely saved to database! (Record ID: ${responseData.id})` 
+        message: "Message delivered successfully! Check your email inbox." 
       });
       (e.target as HTMLFormElement).reset();
     } catch (err: any) {
-      console.error("Database Error:", err);
-      setResult({ error: err.message || "Failed to connect to database." });
+      console.error("Delivery Error:", err);
+      setResult({ error: err.message || "Failed to send message." });
     } finally {
       setIsPending(false);
     }
