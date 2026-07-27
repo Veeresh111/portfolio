@@ -69,7 +69,7 @@ export default function Home() {
               </Link>
             </Button>
             <Button variant="glass" size="lg" className="rounded-full gap-2" asChild>
-              <a href="resume.txt" download="Veeresh_Mulge_Resume.txt">
+              <a href="resume.pdf" download="Veeresh_Mulge_Resume.pdf">
                 <Download className="w-4 h-4" /> Download Resume
               </a>
             </Button>
