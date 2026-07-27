@@ -2,10 +2,54 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Send, MapPin, Mail, Phone } from "lucide-react";
+import { Send, MapPin, Mail, Phone, CheckCircle2, AlertCircle } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function Contact() {
+  const [isPending, setIsPending] = useState(false);
+  const [result, setResult] = useState<{ success?: boolean; message?: string; error?: string } | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsPending(true);
+    setResult(null);
+    
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const subject = formData.get("subject") as string || "No Subject";
+    const message = formData.get("message") as string;
+
+    try {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+      
+      // If keys aren't set, simulate a successful database insert so the app doesn't crash
+      if (!supabaseUrl || supabaseUrl.includes("placeholder") || supabaseUrl.includes("your-supabase")) {
+        console.log("Mock DB Insert:", { name, email, subject, message });
+        setResult({ success: true, message: "Message sent! (Mock Mode: Supabase keys missing)" });
+        (e.target as HTMLFormElement).reset();
+        return;
+      }
+
+      // Real Supabase Insert
+      const { error } = await supabase
+        .from("messages")
+        .insert([{ name, email, subject, message }]);
+
+      if (error) throw error;
+
+      setResult({ success: true, message: "Message securely saved to Supabase database!" });
+      (e.target as HTMLFormElement).reset();
+    } catch (err: any) {
+      console.error("Database Error:", err);
+      setResult({ error: err.message || "Failed to connect to database." });
+    } finally {
+      setIsPending(false);
+    }
+  };
+
   return (
     <section id="contact" className="py-24 relative">
       <div className="container mx-auto px-6">
@@ -77,7 +121,7 @@ export default function Contact() {
             transition={{ duration: 0.5 }}
           >
             <div className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
-              <form action="https://formsubmit.co/prakashmulge912@gmail.com" method="POST" className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label htmlFor="name" className="text-sm font-medium text-muted-foreground">Name *</label>
@@ -107,7 +151,7 @@ export default function Contact() {
                   <input 
                     type="text" 
                     id="subject" 
-                    name="_subject"
+                    name="subject"
                     className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                     placeholder="Project Inquiry"
                   />
@@ -123,10 +167,23 @@ export default function Contact() {
                     placeholder="Hello, I'd like to talk about..."
                   />
                 </div>
-                <input type="hidden" name="_next" value="https://veeresh111.github.io/portfolio" />
-                <input type="hidden" name="_captcha" value="false" />
-                <Button variant="premium" type="submit" className="w-full h-12 text-lg gap-2">
-                  <Send className="w-5 h-5" /> Send Message
+                
+                {result?.success && (
+                  <div className="p-3 bg-green-500/10 border border-green-500/20 text-green-400 rounded-lg flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5" />
+                    <span className="text-sm">{result.message}</span>
+                  </div>
+                )}
+                
+                {result?.error && (
+                  <div className="p-3 bg-red-500/10 border border-red-500/20 text-red-400 rounded-lg flex items-center gap-2">
+                    <AlertCircle className="w-5 h-5" />
+                    <span className="text-sm">{result.error}</span>
+                  </div>
+                )}
+
+                <Button variant="premium" type="submit" disabled={isPending} className="w-full h-12 text-lg gap-2">
+                  <Send className="w-5 h-5" /> {isPending ? "Connecting to DB..." : "Send Message"}
                 </Button>
               </form>
             </div>
