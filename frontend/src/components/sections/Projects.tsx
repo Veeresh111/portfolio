@@ -19,7 +19,7 @@ const projects = [
     tags: ["React.js", "Gemini API", "CNN", "NLP"],
     category: "AI",
     github: "https://github.com/Veeresh111/AI-Driven-Mock-Interview-Simulator",
-    demo: "https://veeresh111.github.io/AI-Driven-Mock-Interview-Simulator/"
+    demo: "https://ai-driven-mock-interview.vercel.app"
   },
   {
     title: "Enterprise Management System",
