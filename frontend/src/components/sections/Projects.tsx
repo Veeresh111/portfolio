@@ -18,7 +18,7 @@ const projects = [
     image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
     tags: ["React.js", "Gemini API", "CNN", "NLP"],
     category: "AI",
-    github: "https://github.com/Veeresh111",
+    github: "https://github.com/Veeresh111/AI-Driven-Mock-Interview-Simulator",
     demo: "#"
   },
   {
@@ -27,7 +27,7 @@ const projects = [
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
     tags: ["React", "TypeScript", "Supabase", "Vite"],
     category: "Full Stack",
-    github: "https://github.com/Veeresh111",
+    github: "https://github.com/Veeresh111/Banking-Management-System",
     demo: "#"
   },
   {
@@ -36,7 +36,7 @@ const projects = [
     image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80",
     tags: ["HTML", "CSS", "JavaScript", "Cloud"],
     category: "Web",
-    github: "https://github.com/Veeresh111",
+    github: "https://github.com/Veeresh111/E-Commerce-Business-Management",
     demo: "#"
   },
   {
@@ -142,11 +142,13 @@ export default function Projects() {
                       <FaGithub className="w-4 h-4" /> Code
                     </Link>
                   </Button>
-                  <Button variant="ghost" size="sm" asChild className="gap-2 hover:bg-white/5 hover:text-white flex-1">
-                    <Link href={project.demo} target="_blank">
-                      <ExternalLink className="w-4 h-4" /> Demo
-                    </Link>
-                  </Button>
+                  {project.demo !== "#" && project.demo !== "" && (
+                    <Button variant="ghost" size="sm" asChild className="gap-2 hover:bg-white/5 hover:text-white flex-1">
+                      <Link href={project.demo} target="_blank">
+                        <ExternalLink className="w-4 h-4" /> Demo
+                      </Link>
+                    </Button>
+                  )}
                 </CardFooter>
               </Card>
             </motion.div>
