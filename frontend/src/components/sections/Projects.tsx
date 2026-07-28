@@ -28,7 +28,7 @@ const projects = [
     tags: ["React", "TypeScript", "Supabase", "Vite"],
     category: "Full Stack",
     github: "https://github.com/Veeresh111/Banking-Management-System",
-    demo: "#"
+    demo: "https://aihrmsplatform.vercel.app/"
   },
   {
     title: "E-Commerce & Inventory Management",
