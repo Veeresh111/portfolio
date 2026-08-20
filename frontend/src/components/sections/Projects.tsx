@@ -28,7 +28,7 @@ const projects = [
     tags: ["React", "TypeScript", "Supabase", "Vite"],
     category: "Full Stack",
     github: "https://github.com/Veeresh111/Banking-Management-System",
-    demo: "https://aihrmsplatform.vercel.app/"
+    demo: "https://aihrsystem24.vercel.app"
   },
   {
     title: "E-Commerce & Inventory Management",
@@ -64,7 +64,7 @@ const categories = ["All", "AI", "Full Stack", "ML", "Web"];
 export default function Projects() {
   const [activeCategory, setActiveCategory] = useState("All");
 
-  const filteredProjects = projects.filter(p => 
+  const filteredProjects = projects.filter(p =>
     activeCategory === "All" || p.category === activeCategory
   );
 
@@ -81,7 +81,7 @@ export default function Projects() {
             <h2 className="text-4xl md:text-5xl font-bold font-heading mb-4">Featured Projects</h2>
             <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full" />
           </div>
-          
+
           <div className="flex flex-wrap gap-2">
             {categories.map(cat => (
               <button
@@ -89,8 +89,8 @@ export default function Projects() {
                 onClick={() => setActiveCategory(cat)}
                 className={clsx(
                   "px-4 py-2 rounded-full text-sm font-medium transition-all",
-                  activeCategory === cat 
-                    ? "bg-white text-black" 
+                  activeCategory === cat
+                    ? "bg-white text-black"
                     : "bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-white"
                 )}
               >
@@ -112,8 +112,8 @@ export default function Projects() {
               <Card className="bg-white/5 border-white/10 hover:border-white/20 transition-all overflow-hidden group h-full flex flex-col">
                 <div className="relative h-48 overflow-hidden">
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10" />
-                  <img 
-                    src={project.image} 
+                  <img
+                    src={project.image}
                     alt={project.title}
                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
                   />
